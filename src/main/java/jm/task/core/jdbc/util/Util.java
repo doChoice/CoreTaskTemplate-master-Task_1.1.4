@@ -32,16 +32,20 @@ public class Util {
             configuration.setProperty(Environment.PASS, PASSWORD);
             configuration.setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
             configuration.setProperty(Environment.SHOW_SQL, "true");
+            configuration.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS,"thread");
             configuration.setProperty(Environment.HBM2DDL_AUTO, "create");
 
 
-            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-            builder.applySettings(configuration.getProperties());
-            ServiceRegistry serviceRegistry = builder.build();
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .build();
 
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
         }
         return sessionFactory;
+    }
+
+    public static void closeSessionFactory() {
+        sessionFactory.close();
     }
 }
